@@ -1,4 +1,4 @@
-from .models import Vehiculo, Chofer, RegistroContabilidad
+from gestion_vehiculos.models import Vehiculo, Chofer, RegistroContabilidad
 
 
 def crear_vehiculo(patente, marca, modelo, year):
@@ -34,11 +34,14 @@ def habilitar_chofer(rut):
 
 def deshabilitar_vehiculo(patente):
     vehiculo = Vehiculo.objects.get(patente=patente)
-    vehiculo.delete()
+    vehiculo.activo = False
+    vehiculo.save()
 
 
-def habilitar_vehiculo(patente, marca, modelo, year):
-    return crear_vehiculo(patente, marca, modelo, year)
+def habilitar_vehiculo(patente):
+    vehiculo = Vehiculo.objects.get(patente=patente)
+    vehiculo.activo = True
+    vehiculo.save()
 
 
 def obtener_vehiculo(patente):
@@ -57,4 +60,4 @@ def asignar_chofer_a_vehiculo(rut, patente):
 
 
 def imprimir_datos_vehiculos():
-    return list(Vehiculo.objects.all())
+    return list(Vehiculo.objects.filter(activo=True))
